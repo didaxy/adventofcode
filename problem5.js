@@ -1,22 +1,19 @@
-let input = ``
+input = 277678
+
+total = input - 1
+console.log(total);
+matched = false
+n=1
 
 
-// let input =`RRU`
-
-let rows = input.split('\n')
-
-let table = rows.map(n => n.split(''))
-
-//split into 'columns' on arbitrary whitespace
-//discards initial column
-// let table = rows.map(n => {
-//   let [a, ...b] = n.split(/\s+/)
-//   return b.map(n => Number(n))
-// })
-
-//sort
-// let sorted = table.map(n => n.sort((a,b) => a - b))
-
-// console.log(sorted);
-
-console.log("bo");
+while (!matched) {
+  size = 8 * n
+  oldtotal = total
+  total -= size
+  console.log(`${n}, ${size}, ${total}`);
+  if (total < 0) {
+    matched = true;
+    console.log(`${n} ${size} ${total} ${oldtotal}`);
+  }
+  n = n+1
+}
