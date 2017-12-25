@@ -1,12 +1,11 @@
 const fs = require('fs');
 
-fs.readFile('dummy.day19.txt','utf8', (err, input) => {
+fs.readFile('input.day19.txt','utf8', (err, input) => {
   if (err) console.log("no file");
   let grid = input.split('\n')
-  console.log(grid);
-
+  // console.log(grid);
   let start = grid[0].indexOf('|')
-  console.log(`star pos ${start}`);
+  // console.log(`start column: ${start}`);
   let pos = [0,start]
   let dir = [1,0]
   let here, lookahead, lookfurther
@@ -14,12 +13,14 @@ fs.readFile('dummy.day19.txt','utf8', (err, input) => {
   let count = 0
 
   do {
-    console.log(`pos is ${pos}, dir is ${dir}`);
+    // console.log(`pos is ${pos}, dir is ${dir}`);
 
-  if (pos[0] < 0 || pos[0] > grid.length || pos[1] < 0 || pos[1] > grid[0].length) break;
-
+  if (pos[0] < 0 || pos[0] > grid.length - 1 || pos[1] < 0 || pos[1] > grid[0].length - 1) {
+    console.log(`out of bounds`);
+    break;
+  }
   here = grid[pos[0]][pos[1]]
-  lookahead = grid[pos[0] + dir[0]][pos[1] + dir[1]]
+  lookahead = grid[pos[0] + dir[0]] && grid[pos[0] + dir[0]][pos[1] + dir[1]]
   // let lookahead = grid[1][0]
   if (here.match(/[A-Z]/)) {
     // if (letters.includes(here)) {
@@ -28,9 +29,10 @@ fs.readFile('dummy.day19.txt','utf8', (err, input) => {
     // } else {
     //   letters.push(here)
     // }
+    // if (letters.includes(here)) break;
     letters.push(here)
   }
-  console.log(`here is ${here} and next is ${lookahead}`);
+  // console.log(`here is ${here} and next is ${lookahead}`);
 
   if (lookahead && ((dir[1] == 0 && lookahead == "|")
         || dir[0] == 0 && lookahead == "-"
@@ -41,9 +43,10 @@ fs.readFile('dummy.day19.txt','utf8', (err, input) => {
           pos = [pos[0] + dir[0], pos[1] + dir[1]]
         } else {
           if (grid[pos[0] + (2 * dir[0])]) lookfurther = grid[pos[0] + (2 * dir[0])][pos[1] + (2 * dir[1])]
-          console.log(`looking further sees ${lookfurther}`);
-          if (lookfurther && ((dir[1] == 0 && (lookfurther == "|" || lookfurther.match(/[A-Z]/) || lookfurther == "+"))
-               || (dir[0] == 0 && (lookfurther == "-" || lookfurther.match(/[A-Z]/) || lookfurther == "+")))) {
+          // console.log(`looking further sees ${lookfurther}`);
+          //|| (lookfurther == "+" && lookahead != " ")
+          if (lookfurther && ((dir[1] == 0 && (lookfurther == "|" || lookfurther.match(/[A-Z]/) ))
+               || (dir[0] == 0 && (lookfurther == "-" || lookfurther.match(/[A-Z]/) )))) {
                  //move anyway
                  // console.log(`looked further and found ${lookfurther}`);
                  // console.log("go anyway");
@@ -53,15 +56,16 @@ fs.readFile('dummy.day19.txt','utf8', (err, input) => {
                  console.log("turns");
                  dir = [dir[1], dir[0]]
                  console.log(dir);
-                 console.log(`finds ${grid[pos[0] + dir[0]][pos[1] + dir[1]]}`);
-                 if ((dir[0] == 0 && (grid[pos[0] + dir[0]][pos[1] + dir[1]] == "|"
-                                      || typeof grid[pos[0] + dir[0]][pos[1] + dir[1]] == "undefined"
-                                      || grid[pos[0] + dir[0]][pos[1] + dir[1]] == " "))
-                  || (dir[1] == 0 && (grid[pos[0] + dir[0]][pos[1] + dir[1]] == "-")
-                                      || typeof grid[pos[0] + dir[0]][pos[1] + dir[1]] == "undefined"
-                                      || grid[pos[0] + dir[0]][pos[1] + dir[1]] == " ")) {
+                 found = grid[pos[0] + dir[0]] && grid[pos[0] + dir[0]][pos[1] + dir[1]]
+                 console.log(`finds ${found}`);
+                 if ((dir[0] == 0 && (found == "|"
+                                      || typeof found == "undefined"
+                                      || found == " "))
+                  || (dir[1] == 0 && (found == "-")
+                                      || typeof found == "undefined"
+                                      || found == " ")) {
                         //turn the other way
-                        console.log(`other way`);
+                        // console.log(`other way`);
                         dir = [0 - dir[0], 0 - dir[1]]
                       }
                }
@@ -73,7 +77,7 @@ fs.readFile('dummy.day19.txt','utf8', (err, input) => {
  // if (count > 50) break;
  lookahed = null
  lookfurther = null
- console.log(`${count} ${letters}`);
+//  console.log(`${count} ${letters}`);
 } while (true)
 
 console.log(letters);

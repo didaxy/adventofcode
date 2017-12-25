@@ -42,7 +42,6 @@
 // }
 
 function doThing() {
-    console.log("doing thing");
 }
 
 // function doOtherThing() {
@@ -144,15 +143,32 @@ function waitAndDoThing(callback) {
 //     return new Promise(resolve => waitAndDoThing(doThing));
 //   }
 
+//so, I've got a function that takes a callback, calls setTimeout passing the callback
+//and then returns
 
+//I want to wrap it in another function that will wait for the callback to return
+//the callback can be anything
 
+//so, the callback should return a promise?
+//and my wrapper function, outer is async, because it's the one that needs to wait.
+
+//
 
 function wrapper(fn) {
-    return new Promise(resolve => fn(() => resolve))
+  return new Promise(function(resolve, reject) {
+      fn((err, result) => {
+          console.log("doing thing (prom res/rej)");
+          if (err) return reject(err);
+          resolve(result);
+      });
+  });
 }
-  
-  async function f1() {
-    var x = await wrapper(doThing);
+
+
+
+  async function outer() {
+    var x = await wrapper(waitAndDoThing);
     console.log('x'); // 10
   }
-  f1()
+
+  outer()
